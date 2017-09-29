@@ -1,5 +1,4 @@
 <?php 
-$pdo = new PDO('mysql:host=localhost;dbname=protokollwebapp', 'root', '');
 include('_db_connect.php');
 ?>
 <!DOCTYPE html> 

@@ -5,14 +5,14 @@ if(isset($_GET['login'])) {
  $email = $_POST['email'];
  $passwort = $_POST['passwort'];
  
- $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+ $statement = $pdo->prepare("SELECT * FROM schueler WHERE email = :email");
  $result = $statement->execute(array('email' => $email));
  $user = $statement->fetch();
  
  //Überprüfung des Passworts
  if ($user !== false && password_verify($passwort, $user['passwort'])) {
  $_SESSION['email'] = $email;
- header('Location: login_erfolgreich.php');
+ header('Location: _startseite.php');
  } else {
  $errorMessage = "E-Mail oder Passwort war ungültig<br>";
  }
@@ -40,7 +40,7 @@ Dein Passwort:<br>
 <input type="password" size="40"  maxlength="250" name="passwort"><br>
  
 <input class="submit" type="submit" value="login">
-<br><br><a class="link" href="registrieren_seite.php">Registrieren</a>
+<br><br><a class="link" href="_registrieren.php">Registrieren</a>
 </form> 
 </body>
 </html>
