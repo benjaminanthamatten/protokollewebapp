@@ -1,4 +1,6 @@
 <?php
+session_start();
+
   $server = "localhost"; //Server hier eingeben
   $user= "root"; //Benutzername hier eingeben
   $pass = ""; //Passwort des Server-Benutzers eingeben

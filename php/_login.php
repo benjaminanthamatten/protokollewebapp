@@ -1,6 +1,5 @@
 <?php 
 include('_db_connect.php');
-session_start();
  
 if(isset($_GET['login'])) {
  $email = $_POST['email'];
