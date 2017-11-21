@@ -8,5 +8,6 @@
                 or die("Verbindung konnte nicht hergestellt werden.");
 				
 	$pdo = new PDO('mysql:host=localhost;dbname=protokollewebapp', 'root', '');
-				
+	
+	
 ?> 

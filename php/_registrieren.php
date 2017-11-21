@@ -14,6 +14,7 @@ $showFormular = true; //Variable ob das Registrierungsformular anezeigt werden s
 if(isset($_GET['register'])) {
  $error = false;
  $email = $_POST['email'];
+ $klasse = $_POST['klasse'];
  $passwort = $_POST['passwort'];
  $passwort2 = $_POST['passwort2'];
   
@@ -46,11 +47,13 @@ if(isset($_GET['register'])) {
  if(!$error) { 
  $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
  
- $statement = $pdo->prepare("INSERT INTO schueler (email, passwort) VALUES (:email, :passwort)");
- $result = $statement->execute(array('email' => $email, 'passwort' => $passwort_hash));
+ $statement = $pdo->prepare("INSERT INTO schueler (email, passwort, klasse) VALUES (:email, :passwort, :klasse)");
+ $result = $statement->execute(array('email' => $email, 'passwort' => $passwort_hash, 'klasse' => $klasse));
  
  if($result) { 
- echo 'Du wurdest erfolgreich registriert. <a href="_login.php">Zum Login</a>';
+ session_start();
+ $_SESSION['email'] = $email;
+ header('Location: _startseite.php');
  $showFormular = false;
  } else {
  echo 'Beim Abspeichern ist leider ein Fehler aufgetreten<br>';
@@ -64,6 +67,14 @@ if($showFormular) {
 <form action="?register=1" method="post">
 E-Mail:<br>
 <input type="email" size="40" maxlength="250" name="email"><br><br>
+
+Klasse:<br>
+<select name="klasse">
+<option>ME1</option>
+<option>ME2</option>
+<option>ME3</option>
+<option>ME4</option>
+</select><br><br> 
  
 Dein Passwort:<br>
 <input type="password" size="40"  maxlength="250" name="passwort"><br>
