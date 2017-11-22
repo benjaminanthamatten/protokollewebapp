@@ -1,6 +1,7 @@
 <!-- MYSQL-Abfragen & PHP-Includes -->
 <?php
 include('_db_connect.php');
+
 if(!isset($_SESSION['email'])){
     header('Location: ../');
 }
@@ -13,10 +14,8 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
 	$klasse = $schueler_angemeldet['klasse'];
 }
 
-$sql_schueler = "SELECT * FROM schueler";
-foreach ($pdo->query($sql_schueler) as $schueler) {
-	
 
+    
 ?>
 
 
@@ -50,7 +49,7 @@ foreach ($pdo->query($sql_schueler) as $schueler) {
             <a class="nav-link js-scroll-trigger" href="#hinzufuegen">Hinzufügen</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#education">Education</a>
+            <a class="nav-link js-scroll-trigger" href="#bearbeiten">Bearbeiten</a>
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#skills">Skills</a>
@@ -80,8 +79,8 @@ foreach ($pdo->query($sql_schueler) as $schueler) {
 			  |
             </li>
             <li class="list-inline-item">
-              <a href="#">
-                Protokoll löschen
+              <a href="#bearbeiten">
+                Protokolle bearbeiten
               </a>
 			  |
             </li>
@@ -106,6 +105,8 @@ foreach ($pdo->query($sql_schueler) as $schueler) {
           <h2 class="mb-5">Protokoll hinzufügen</h2>
 
           <div class="resume-item d-flex flex-column flex-md-row mb-5">
+             
+            <!-- PROTOKOLL HINZUFUEGEN -->  
             <div id="hinzufuegen">
                 <form action="_protokoll_hinzufuegen.php" method="post">
                     Was habe ich gemacht: <textarea class="form-control" name="gemacht"></textarea><br>
@@ -115,37 +116,52 @@ foreach ($pdo->query($sql_schueler) as $schueler) {
                     <br><input class="btn" type="submit" name="send" value="Absenden">
                 </form>
             </div>
+            <!-- ENDE PROTOKOLL HINZUFUEGEN -->  
+        
           </div>
 
         </div>
 
       </section>
 
-      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="education">
+      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="bearbeiten">
         <div class="my-auto">
-          <h2 class="mb-5">Education</h2>
+          <h2 class="mb-5">Protokolle bearbeiten</h2>
 
           <div class="resume-item d-flex flex-column flex-md-row mb-5">
-            <div class="resume-content mr-auto">
-              <h3 class="mb-0">University of Colorado Boulder</h3>
-              <div class="subheading mb-3">Bachelor of Science</div>
-              <div>Computer Science - Web Development Track</div>
-              <p>GPA: 3.23</p>
-            </div>
-            <div class="resume-date text-md-right">
-              <span class="text-primary">August 2006 - May 2010</span>
-            </div>
-          </div>
-
-          <div class="resume-item d-flex flex-column flex-md-row">
-            <div class="resume-content mr-auto">
-              <h3 class="mb-0">James Buchanan High School</h3>
-              <div class="subheading mb-3">Technology Magnet Program</div>
-              <p>GPA: 3.56</p>
-            </div>
-            <div class="resume-date text-md-right">
-              <span class="text-primary">August 2002 - May 2006</span>
-            </div>
+              
+              <!-- PROTOKOLL HINZUFUEGEN -->  
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>gemacht</th>
+                        <th>von</th>
+                        <th>bis</th>
+                        <th>Probleme</th>
+                        <th>bearbeiten</th>
+                        <th>löschen</th>
+                      </tr>
+                    </thead>
+                    <tbody>            
+                        <?php
+                        $sql_protokolle = "SELECT * FROM protokolle WHERE schueler = '$email'";
+                        foreach ($pdo->query($sql_protokolle) as $protokolle) {
+                        ?>
+                    <tr> 
+                        <form>
+                        <td><?php echo $protokolle['gemacht'] ?></td>
+                        <td><?php echo $protokolle['von'] ?></td>
+                        <td><?php echo $protokolle['bis'] ?></td>
+                        <td><?php echo $protokolle['probleme'] ?></td>
+                        <td width="1%"><a href="_protokoll_bearbeiten.php?id=<?php echo $protokolle['protokollID'] ?>">🔧</a></td>
+                        <td width="1%"><a href="_protokoll_loeschen.php?id=<?php echo $protokolle['protokollID'] ?>">❌</a></td>
+                        <!-- emojis finden: https://apps.timwhitlock.info/emoji/tables/unicode -->
+                    </tr>    
+                        <?php } ?>           
+                    </tbody>
+                </table>
+              <!-- ENDE PROTOKOLL HINZUFUEGEN -->  
+              
           </div>
 
         </div>
@@ -269,8 +285,3 @@ foreach ($pdo->query($sql_schueler) as $schueler) {
 
 </html>
 
-<!-- MYSQL-Abfragen Klammern schliessen -->
-<?php
-} // Klmmer schliessen: Abfrage Tabelle "Schueler" 
-
-?>

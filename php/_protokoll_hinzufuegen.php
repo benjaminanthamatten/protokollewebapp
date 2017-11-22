@@ -11,5 +11,6 @@
 	$sql_speichern = mysqli_query($verbindung, $sql);
 	$_SESSION['popup'] = TRUE;
 	$_SESSION['link'] = 'hinzufuegen';
+    $_SESSION['nachricht'] = 'gespeichert';
     header('Location: _startseite.php#hinzufuegen');
 ?>

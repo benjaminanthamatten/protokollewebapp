@@ -32,7 +32,7 @@ if(isset($_GET['popupSchliessen'])){
 <a href="?popupSchliessen">
 <div id="popup_hintergrund">
 	<div id="popup_inhalt">
-	<h3>Erfolgreich gespeichert</h3>
+	<h3>Erfolgreich <?php echo $_SESSION['nachricht'] ?></h3>
 	</div>
 </div>
 </a>
