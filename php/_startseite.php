@@ -127,10 +127,41 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
       <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="bearbeiten">
         <div class="my-auto">
           <h2 class="mb-5">Protokolle bearbeiten</h2>
+            
+            
+            <!-- PROTOKOLL BEARBEITEN (WIRD NUR ANGEZEIGT WENN DIE SESSION AKTIV IST) -->
+                <?php
+                if(isset($_SESSION['bearbeiten'])){
+                    if($_SESSION['bearbeiten'] == 1){
+                        $id = $_SESSION['bearbeiten_id'];
+                ?>
+                <div class="resume-item d-flex flex-column flex-md-row mb-5">
+                <?php      
+                        $sql_bearbeiten = "SELECT * FROM protokolle WHERE protokollID = '$id'";
+                        foreach ($pdo->query($sql_bearbeiten) as $bearbeiten) {     
+                        ?>
+                        <form action="_protokoll_bearbeiten.php?id=<?php echo $id ?>" method="post">
+                        Gemacht: <textarea class='form-control' name='gemacht' type='text'><?php echo $bearbeiten['gemacht'] ?></textarea>
+                        Von: <input class='form-control' name='von' type='text' value='<?php echo $bearbeiten['von'] ?>'>
+                        Bis: <input class='form-control' name='bis' type='text' value='<?php echo $bearbeiten['bis'] ?>'>
+                        Probleme: <input class='form-control' name='probleme' type='text' value='<?php echo $bearbeiten['probleme'] ?>'>
+                        <br><input class='btn' type='submit' name='speichern' value='Änderungen speichern'>
+                            <input class='btn' type='submit' name='abbrechen' value='Abbrechen'>
+                        </form>
+                        <?php
+                    }
+                ?>
+                </div>
+                <?php      
+                }}         
+                ?>
+            <!-- ENDE PROTOKOLL BEARBEITEN-->   
 
+            
           <div class="resume-item d-flex flex-column flex-md-row mb-5">
               
-              <!-- PROTOKOLL HINZUFUEGEN -->  
+              
+              <!-- Eigene PROTOKOLLE anzeigen -->  
                 <table class="table table-striped">
                     <thead>
                       <tr>
@@ -147,8 +178,7 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
                         $sql_protokolle = "SELECT * FROM protokolle WHERE schueler = '$email'";
                         foreach ($pdo->query($sql_protokolle) as $protokolle) {
                         ?>
-                    <tr> 
-                        <form>
+                    <tr>  
                         <td><?php echo $protokolle['gemacht'] ?></td>
                         <td><?php echo $protokolle['von'] ?></td>
                         <td><?php echo $protokolle['bis'] ?></td>
@@ -160,7 +190,7 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
                         <?php } ?>           
                     </tbody>
                 </table>
-              <!-- ENDE PROTOKOLL HINZUFUEGEN -->  
+              <!-- ENDE Eigene PROTOKOLLE anzeigen -->  
               
           </div>
 
