@@ -7,7 +7,8 @@
 	$bis = $_POST['bis'];
 	$gemacht = $_POST['gemacht'];
 	$probleme = $_POST['probleme'];
-	$sql = "INSERT INTO protokolle (schueler, gemacht, von, bis, probleme) VALUES('$schueler_logged', '$gemacht', '$von', '$bis', '$probleme')";
+  $heute = date("Y-m-d");
+	$sql = "INSERT INTO protokolle (schueler, gemacht, von, bis, probleme, datum) VALUES('$schueler_logged', '$gemacht', '$von', '$bis', '$probleme', '$heute')";
 	$sql_speichern = mysqli_query($verbindung, $sql);
 	$_SESSION['popup'] = TRUE;
 	$_SESSION['link'] = 'hinzufuegen';

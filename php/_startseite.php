@@ -1,4 +1,5 @@
 <!-- MYSQL-Abfragen & PHP-Includes -->
+
 <?php
 include('_db_connect.php');
 
@@ -6,7 +7,6 @@ if(!isset($_SESSION['email'])){
     header('Location: ../');
 }
 
-$email = $_SESSION['email'];
 
 $sql_schueler_angemeldet = "SELECT * FROM schueler WHERE email = '$email'";
 foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
@@ -15,7 +15,7 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
 }
 
 
-    
+
 ?>
 
 
@@ -52,13 +52,10 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
             <a class="nav-link js-scroll-trigger" href="#bearbeiten">Bearbeiten</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#skills">Skills</a>
+            <a class="nav-link js-scroll-trigger" href="#uebersicht">Übersicht</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#interests">Interests</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#awards">Awards</a>
+            <a class="nav-link js-scroll-trigger" href="#abmelden">Abmelden</a>
           </li>
         </ul>
       </div>
@@ -85,7 +82,7 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
 			  |
             </li>
             <li class="list-inline-item">
-              <a href="#">
+              <a href="#uebersicht">
                 Übersicht
               </a>
 			  |
@@ -104,21 +101,18 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
         <div class="my-auto">
           <h2 class="mb-5">Protokoll hinzufügen</h2>
 
-          <div class="resume-item d-flex flex-column flex-md-row mb-5">
-             
-            <!-- PROTOKOLL HINZUFUEGEN -->  
+
+            <!-- PROTOKOLL HINZUFUEGEN -->
             <div id="hinzufuegen">
                 <form action="_protokoll_hinzufuegen.php" method="post">
                     Was habe ich gemacht: <textarea class="form-control" name="gemacht"></textarea><br>
-                    Von: <input class="form-control" name="von" type="time"></input><br>
-                    Bis: <input class="form-control" name="bis" type="time"></input><br>
-                    Probleme: <input class="form-control" name="probleme" type="text"></input>
+                    Von: <input class="form-control" name="von" type="time"><br>
+                    Bis: <input class="form-control" name="bis" type="time"><br>
+                    Probleme: <input class="form-control" name="probleme" type="text">
                     <br><input class="btn" type="submit" name="send" value="Absenden">
                 </form>
             </div>
-            <!-- ENDE PROTOKOLL HINZUFUEGEN -->  
-        
-          </div>
+            <!-- ENDE PROTOKOLL HINZUFUEGEN -->
 
         </div>
 
@@ -127,18 +121,19 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
       <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="bearbeiten">
         <div class="my-auto">
           <h2 class="mb-5">Protokolle bearbeiten</h2>
-            
-            
+
+
             <!-- PROTOKOLL BEARBEITEN (WIRD NUR ANGEZEIGT WENN DIE SESSION AKTIV IST) -->
+                <p>
                 <?php
                 if(isset($_SESSION['bearbeiten'])){
                     if($_SESSION['bearbeiten'] == 1){
                         $id = $_SESSION['bearbeiten_id'];
                 ?>
-                <div class="resume-item d-flex flex-column flex-md-row mb-5">
-                <?php      
+                <div class="bearbeiten">
+                <?php
                         $sql_bearbeiten = "SELECT * FROM protokolle WHERE protokollID = '$id'";
-                        foreach ($pdo->query($sql_bearbeiten) as $bearbeiten) {     
+                        foreach ($pdo->query($sql_bearbeiten) as $bearbeiten) {
                         ?>
                         <form action="_protokoll_bearbeiten.php?id=<?php echo $id ?>" method="post">
                         Gemacht: <textarea class='form-control' name='gemacht' type='text'><?php echo $bearbeiten['gemacht'] ?></textarea>
@@ -152,16 +147,18 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
                     }
                 ?>
                 </div>
-                <?php      
-                }}         
+                <?php
+                }}
                 ?>
-            <!-- ENDE PROTOKOLL BEARBEITEN-->   
+              </p>
+            <!-- ENDE PROTOKOLL BEARBEITEN-->
 
-            
+
           <div class="resume-item d-flex flex-column flex-md-row mb-5">
-              
-              
-              <!-- Eigene PROTOKOLLE anzeigen -->  
+
+
+              <!-- Eigene PROTOKOLLE anzeigen -->
+
                 <table class="table table-striped">
                     <thead>
                       <tr>
@@ -173,12 +170,12 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
                         <th>löschen</th>
                       </tr>
                     </thead>
-                    <tbody>            
+                    <tbody>
                         <?php
                         $sql_protokolle = "SELECT * FROM protokolle WHERE schueler = '$email'";
                         foreach ($pdo->query($sql_protokolle) as $protokolle) {
                         ?>
-                    <tr>  
+                    <tr>
                         <td><?php echo $protokolle['gemacht'] ?></td>
                         <td><?php echo $protokolle['von'] ?></td>
                         <td><?php echo $protokolle['bis'] ?></td>
@@ -186,116 +183,89 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
                         <td width="1%"><a href="_protokoll_bearbeiten.php?id=<?php echo $protokolle['protokollID'] ?>">🔧</a></td>
                         <td width="1%"><a href="_protokoll_loeschen.php?id=<?php echo $protokolle['protokollID'] ?>">❌</a></td>
                         <!-- emojis finden: https://apps.timwhitlock.info/emoji/tables/unicode -->
-                    </tr>    
-                        <?php } ?>           
+                    </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
-              <!-- ENDE Eigene PROTOKOLLE anzeigen -->  
-              
+              <!-- ENDE Eigene PROTOKOLLE anzeigen -->
+
           </div>
 
         </div>
       </section>
 
-      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="skills">
+      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="uebersicht">
         <div class="my-auto">
-          <h2 class="mb-5">Skills</h2>
+          <h2 class="mb-5">Gesamtübersicht der Protokolle</h2>
 
-          <div class="subheading mb-3">Programming Languages &amp; Tools</div>
-          <ul class="list-inline list-icons">
-            <li class="list-inline-item">
-              <i class="devicons devicons-html5"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-css3"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-javascript"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-jquery"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-sass"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-less"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-bootstrap"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-wordpress"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-grunt"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-gulp"></i>
-            </li>
-            <li class="list-inline-item">
-              <i class="devicons devicons-npm"></i>
-            </li>
-          </ul>
 
-          <div class="subheading mb-3">Workflow</div>
-          <ul class="fa-ul mb-0">
-            <li>
-              <i class="fa-li fa fa-check"></i>
-              Mobile-First, Responsive Design</li>
-            <li>
-              <i class="fa-li fa fa-check"></i>
-              Cross Browser Testing &amp; Debugging</li>
-            <li>
-              <i class="fa-li fa fa-check"></i>
-              Cross Functional Teams</li>
-            <li>
-              <i class="fa-li fa fa-check"></i>
-              Agile Development &amp; Scrum</li>
-          </ul>
+            <!-- Protokolle des angemeldeten Schülers hervorheben -->
+            <style>
+                  tr.hervorheben<?php echo $schuelerID ?>{
+                      color: #bd5d38;
+                      font-weight: bold;
+                  }
+            </style>
+            <!-- Ende hervorheben -->
+
+                <!-- ALLE PROTOKOLLE anzeigen -->
+
+                <?php
+                    include('_protokolle_filtern.php');
+                    if(isset($_COOKIE['filter'])){
+                      $filter_datum = $_COOKIE['datum'];
+                      $filter_schueler = $_COOKIE['schueler'];
+                      $filter_klasse = $_COOKIE['klasse'];
+                      $filter_gemacht = $_COOKIE['gemacht'];
+                    }else {
+                      $filter_datum = '%';
+                      $filter_schueler = '%';
+                      $filter_klasse = '%';
+                      $filter_gemacht = '%';
+                    }
+
+                ?>
+
+
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Datum</th>
+                        <th>Schüler</th>
+                        <th>Klasse</th>
+                        <th>gemacht</th>
+                        <th>von</th>
+                        <th>bis</th>
+                        <th>Probleme</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $sql_protokolle_gesamt = "SELECT * FROM protokolle JOIN schueler ON schueler = email WHERE datum LIKE '$filter_datum' AND schueler LIKE '$filter_schueler' AND klasse LIKE '$filter_klasse' AND gemacht LIKE '%$filter_gemacht%' ORDER BY protokollID DESC";
+                        foreach ($pdo->query($sql_protokolle_gesamt) as $protokolle_gesamt) {
+                        ?>
+                    <tr class='hervorheben<?php echo $protokolle_gesamt['schuelerID'] ?>'>
+                        <td><?php echo $protokolle_gesamt['datum'] ?></td>
+                        <td><?php echo $protokolle_gesamt['schueler'] ?></td>
+                        <td><?php echo $protokolle_gesamt['klasse'] ?></td>
+                        <td><?php echo $protokolle_gesamt['gemacht'] ?></td>
+                        <td><?php echo $protokolle_gesamt['von'] ?></td>
+                        <td><?php echo $protokolle_gesamt['bis'] ?></td>
+                        <td><?php echo $protokolle_gesamt['probleme'] ?></td>
+                    </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+              <!-- ENDE ALLE PROTOKOLLE anzeigen -->
+
         </div>
       </section>
 
-      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="interests">
+     <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="abmelden">
         <div class="my-auto">
-          <h2 class="mb-5">Interests</h2>
+          <h2 class="mb-5">Abmelden</h2>
           <p>Apart from being a web developer, I enjoy most of my time being outdoors. In the winter, I am an avid skiier and novice ice climber. During the warmer months here in Colorado, I enjoy mountain biking, free climbing, and kayaking.</p>
           <p class="mb-0">When forced indoors, I follow a number of sci-fi and fantasy genre movies and television shows, I am an aspiring chef, and I spend a large amount of my free time exploring the latest technolgy advancements in the front-end web development world.</p>
-        </div>
-      </section>
-
-      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="awards">
-        <div class="my-auto">
-          <h2 class="mb-5">Awards &amp; Certifications</h2>
-          <ul class="fa-ul mb-0">
-            <li>
-              <i class="fa-li fa fa-trophy text-warning"></i>
-              Google Analytics Certified Developer</li>
-            <li>
-              <i class="fa-li fa fa-trophy text-warning"></i>
-              Mobile Web Specialist - Google Certification</li>
-            <li>
-              <i class="fa-li fa fa-trophy text-warning"></i>
-              1<sup>st</sup>
-              Place - University of Colorado Boulder - Emerging Tech Competition 2009</li>
-            <li>
-              <i class="fa-li fa fa-trophy text-warning"></i>
-              1<sup>st</sup>
-              Place - University of Colorado Boulder - Adobe Creative Jam 2008 (UI Design Category)</li>
-            <li>
-              <i class="fa-li fa fa-trophy text-warning"></i>
-              2<sup>nd</sup>
-              Place - University of Colorado Boulder - Emerging Tech Competition 2008</li>
-            <li>
-            <li>
-              <i class="fa-li fa fa-trophy text-warning"></i>
-              1<sup>st</sup>
-              Place - James Buchanan High School - Hackathon 2006</li>
-            <li>
-              <i class="fa-li fa fa-trophy text-warning"></i>
-              3<sup>rd</sup>
-              Place - James Buchanan High School - Hackathon 2005</li>
-          </ul>
         </div>
       </section>
 
@@ -314,4 +284,3 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
   </body>
 
 </html>
-
