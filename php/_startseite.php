@@ -30,15 +30,25 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
 	<?php include('_popup_erfolgreich_gespeichert.php'); ?>
 
   <body id="page-top">
+
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
       <a class="navbar-brand js-scroll-trigger" href="#page-top">
         <span class="d-block d-lg-none">Protokolle</span>
         <span class="d-none d-lg-block">
-          <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="../img/profile.jpg" alt="">
+          <?php
+          $filename = "../img/$schuelerID.jpg";
+
+          if (file_exists($filename)) {
+            ?><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="../img/<?php echo $schuelerID; ?>.jpg" alt=""><?php
+          } else {
+            ?><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="../img/placeholder.jpg" alt=""><?php
+          }
+          ?>
+
         </span>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
@@ -53,6 +63,9 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#uebersicht">Übersicht</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#profilbild">Profilbild</a>
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#abmelden">Abmelden</a>
@@ -88,7 +101,13 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
 			  |
             </li>
             <li class="list-inline-item">
-              <a href="#">
+              <a href="#profilbild">
+                Profilbild hochladen
+              </a>
+        |
+            </li>
+            <li class="list-inline-item">
+              <a href="_abmelden.php">
                 Abmelden
               </a>
 			  |
@@ -261,11 +280,24 @@ foreach ($pdo->query($sql_schueler_angemeldet) as $schueler_angemeldet) {
         </div>
       </section>
 
+      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="profilbild">
+        <div class="my-auto">
+        <h2 class="mb-5">Profilbild hochladen</h2>
+        <!-- BILD HOCHLADEN -->
+
+        <form action="_bild_upload.php" method="post" enctype="multipart/form-data">
+        <input class="form-control" type="file" name="datei"><br>
+        <input class="btn" type="submit" value="Hochladen">
+        </form>
+
+        <!-- ENDE BILD HOCHLADEN -->
+      </div>
+       </section>
+
      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="abmelden">
         <div class="my-auto">
           <h2 class="mb-5">Abmelden</h2>
-          <p>Apart from being a web developer, I enjoy most of my time being outdoors. In the winter, I am an avid skiier and novice ice climber. During the warmer months here in Colorado, I enjoy mountain biking, free climbing, and kayaking.</p>
-          <p class="mb-0">When forced indoors, I follow a number of sci-fi and fantasy genre movies and television shows, I am an aspiring chef, and I spend a large amount of my free time exploring the latest technolgy advancements in the front-end web development world.</p>
+          <a href="_abmelden.php"><button type="button" class="btn"><?php echo $email; ?> abmelden</button></a>
         </div>
       </section>
 

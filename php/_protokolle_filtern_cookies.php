@@ -1,4 +1,5 @@
 <?php
+
 setcookie('datum', $_POST['datum'], time()+(3600*24));
 setcookie('schueler', $_POST['schueler'], time()+(3600*24));
 setcookie('klasse', $_POST['klasse'], time()+(3600*24));
